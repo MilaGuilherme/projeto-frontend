@@ -23,27 +23,30 @@
 </head>
 
 <body>
-  
-  <!-- Add your site or application content here -->
-  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
-  <script src="js/plugins.js"></script>
-  <script src="js/main.js"></script>
-  
+
+
   <header>
-    <h1 class="app-title">Título da sua página ou webapp</h1>
-    <nav>Menu de navegação principal</nav>
+    <h1 class="app-title">Planta de escritório</h1>
+    <nav hidden>Menu de navegação principal</nav>
   </header>
   <main>
     <section class="main-feature">
-      Seu conteúdo ou feature principal vem aqui
+      <img id="grid" src="./img/grid.svg" height="50px" alt="grid" hidden>
+        <div id="funcoes">
+          <img id="estacao" src="./img/estacao.svg" height="50px" alt="estacao-de-trabalho" onclick="addStation()">
+          <img id="parede" src="./img/parede.svg" height="50px" alt="WIP" hidden>
+
+        </div>
+        <div style="flex-grow:1;">
+        <canvas id="canvas"></canvas>
+        </div>
     </section>
     <aside class="secondary-feature">
-      Algum conteúdo ou feature não-principal de apoio
+      Clique no desenho da mesa para começar a adicioná-las ao grid. Clique novamente para removê-las.
     </aside>
   </main>
   <footer>
-    Informações gerais, recursos secundários de apoio,
-    nome do autor.
+    Camila Guilherme
   </footer>
 
 
@@ -55,5 +58,10 @@
   <script src="https://www.google-analytics.com/analytics.js" async></script>
   </main>
 </body>
+
+  <!-- Add your site or application content here -->
+  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
 
 </html>
