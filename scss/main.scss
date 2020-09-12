@@ -1,0 +1,5 @@
+//sass --watch main.scss:../css/main.css
+@use 'styles';
+
+@import "_base";
+@import "_mainContent";

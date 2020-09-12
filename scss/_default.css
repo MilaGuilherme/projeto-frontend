@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #222;
+   }
+   body > header {
+    background-color: #2f3038;
+    padding: 1vh 1vw;
+    height: 10vh;
+    box-sizing: border-box;
+    color: #fff;
+   }
+   body > main {
+    height: 85vh;
+    display: flex;
+   }
+   body > footer {
+    padding: 10px 20px;
+    height: 5vh;
+    background-color: #2f3038;
+    color: #efefef;
+   }
+   h1.app-title {
+    font-size: 20px;
+   }
+   section.main-feature {
+    background-color: #fbfbfb;
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: row;
+    padding:20px;
+  
+   }
+   aside.secondary-feature {
+    background-color: #6F4D8F;
+    flex-basis: 20vh;
+    padding:20px;
+    color: #fff;
+   }
+   
+   canvas {
+     border: 2px solid #aeaeae;
+   }
+  
+   #funcoes {
+     display: flex;
+     flex-direction: column;
+   }
+  
+   #funcoes > *{
+     padding:10px;
+   }

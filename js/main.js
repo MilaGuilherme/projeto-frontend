@@ -110,7 +110,7 @@ function addStation() {
         station.active = true;
     }
     else {
-        station.style.backgroundColor = 'white';
+        station.style.backgroundColor = 'transparent';
         station.active = false;
     }
 };

@@ -1,0 +1,29 @@
+/*Colors*/
+$color__primary: #6F4D8F;
+$color__background-light:#ececec;
+$color__background-dark:#2f3038;
+$color__font-dark:#333;
+$color__font-light:#f6f6f6;
+
+/*Font*/
+$font__main: 'Sarabun','Roboto','OpenSans','Helvetica','Arial';
+$font__alternate: 'Montserrat';
+$font__sm: 0.75em;
+$font__md: 1em;
+$font__lg: 1.5em;
+$font__lg: 2em;
+
+/*Spacers for margin or paddings*/
+$space__sm: 0.5em;
+$space__md: 1em;
+$space__df: 1.5em;
+$space__lg: 3em;
+$space__xl: 4em;
+
+/*Heights*/
+$height__header:10vh;
+$height__main:85vh;
+$height__footer:5vh;
+
+/*Breakpoints - Min-width*/
+$break__desktop:992px;

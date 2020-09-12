@@ -1,0 +1,29 @@
+body{
+    color: styles.$color__font-dark;
+    font-family: styles.$font__main;
+}
+
+header{
+    background-color: styles.$color__background-dark;
+    padding: styles.$space__md;
+    color: styles.$color__font-light;
+    height:styles.$height__header;
+}
+
+main{
+    background-color: styles.$color__background-light;
+    color: styles.$color__font-dark;
+    height:styles.$height__main;
+}
+
+footer{
+    background-color: styles.$color__background-dark;
+    padding: styles.$space__md;
+    color: styles.$color__font-light;
+    height:styles.$height__footer;
+}
+
+h1{
+    font-family: styles.$font__alternate;
+    font-size: styles.$font__lg;
+}
