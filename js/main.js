@@ -35,7 +35,7 @@ class ToolCollection {
     }
 
     activeTool() {
-        return this._activeTool;
+        if (this._hasActiveTool) {return this._activeTool;}
     }
     setActiveTool(tool) {
         if (!this._hasActiveTool) { //Set the clicked tool
@@ -82,9 +82,7 @@ function mouseDown(e) {
     mouseX = Math.floor(mx / 60);
     mouseY = Math.floor(my / 60);
     index = getPositionIndex(mouseX, mouseY, gridPos);
-    if (index > -1) {
-        gridManipulation(index);
-    }
+    index > -1 ? gridManipulation(index) : null;
 };
 
 //On move (WIP)
@@ -102,17 +100,17 @@ function getPositionIndex(x, y, array) {
 function gridManipulation(index) {
     var buildX = gridPos[index].x * 60 + 5;
     var buildY = gridPos[index].y * 60 + 5;
-    if (tools.activeTool) {
+    if (tools.activeTool()) {
         var assetID = tools.activeTool().id;
-        var builtAssets = assets.get(assetID)
-        var buildPosition = getPositionIndex(buildX, buildY, builtAssets)
-        if (buildPosition < 0) {
+        var builtAssets = [...assets.values()].flat();
+        var indexOfAsset = getPositionIndex(buildX, buildY, builtAssets)
+        if (indexOfAsset < 0) {
             builtAssets.push({ 'x': buildX, 'y': buildY, 'type': assetID });
             assets.set(assetID,builtAssets);
             drawCanvas();
         }
-        else {
-            builtAssets.splice(buildPosition, 1);
+        else if(builtAssets[indexOfAsset].type == assetID){
+            builtAssets.splice(indexOfAsset, 1);
             assets.set(assetID,builtAssets);
             drawCanvas();
         }
@@ -120,7 +118,7 @@ function gridManipulation(index) {
 }
 
 //Drag WIP
-// function dragStation() {
+// function dragAsset() {
 
 // };
 
@@ -128,9 +126,9 @@ function gridManipulation(index) {
 function drawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    var builtAssets = [...assets.values()].flat();
-    for (var s in builtAssets) {
-         ctx.drawImage(document.getElementById(builtAssets[s].type), builtAssets[s].x, builtAssets[s].y, 50, 50);
+    var assetsToBuild = [...assets.values()].flat();
+    for (var s in assetsToBuild) {
+         ctx.drawImage(document.getElementById(assetsToBuild[s].type), assetsToBuild[s].x, assetsToBuild[s].y, 50, 50);
     };
 };
 
