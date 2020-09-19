@@ -1,4 +1,6 @@
+// Canvas creation //
 const canvas = document.querySelector("canvas");
+
 //Resize canvas
 canvas.width = Math.round(canvas.parentElement.clientWidth / 60) * 60;
 canvas.height = Math.round(canvas.parentElement.clientHeight / 60) * 60;
@@ -19,33 +21,65 @@ var gridX = Math.round(canvas.width / 60);
 var gridY = Math.round(canvas.height / 60);
 const gridPos = [];
 for (var x = 0; x < gridX; x++) {
-    for (var y = 0; y < gridY; y++) {
+    for (let y = 0; y < gridY; y++) {
         gridPos.push({ 'x': x, 'y': y, 'occupied': false });
     };
 };
 
 /*************************************************************************************************/
 
+class ToolCollection {
+    constructor(name) {
+        this._activeTool;
+        this._hasActiveTool = false;
+        this._types = [];
+    }
 
-// const assets = [];
-// const assetsBar = document.getElementById("funcoes");
-// for(var c = 0 ; c < assetsBar.childElementCount; c++)
-// {
-//     assets.push({'id' : assetsBar.children[c].id})  
-// }
+    addTypes(type){
+        this._types.push(type);
+    }
 
-const station = document.getElementById("estacao");
+    get activeTool() {
+        return this._activeTool;
+    }
+    setActiveTool(tool) {
+        if (!this._hasActiveTool) { //Set the clicked tool
+            this._activeTool = tool;
+            this._hasActiveTool = true;
+            tool.classList.add("is-active")
+        }
+        else {
+            if (tool == this._activeTool) { //Unset the active tool
+                tool.classList.remove("is-active");
+                this._hasActiveTool = false;
+            }
+            else { //Unset the active and set the clicked tool
+                this._activeTool.classList.remove("is-active");
+                this._activeTool = tool;
+                this._hasActiveTool = true;
+                tool.classList.add("is-active");
+            }
+        }
+    }
+}
+
+const tools = new ToolCollection();
+
+const assets = document.getElementsByClassName("tools__toolbox--item");
+
+for (let c = 0; c < assets.length; c++) {
+    let tool = assets[c];
+    let newType = { tipo: tool.id };
+    tools.addTypes(newType);
+    tool.addEventListener("click", () => tools.setActiveTool(tool));
+}
 
 const stations = [];
 const walls = [];
 
-//Mouse events
+// Mouse events
 canvas.onmousedown = mouseDown;
 // canvas.onmousemove = mouseMove;
-
-drawCanvas();
-
-//Mouse functions
 
 //On click
 function mouseDown(e) {
@@ -77,14 +111,14 @@ function getPositionIndex(x, y, array) {
 function gridManipulation(index) {
     var buildX = gridPos[index].x * 60 + 5;
     var buildY = gridPos[index].y * 60 + 5;
-    if (station.active) {
-        var stationPosition = getPositionIndex(buildX, buildY, stations)
-        if (stationPosition < 0) {
+    if (tools.activeTool) {
+        var buildPosition = getPositionIndex(buildX, buildY, stations)
+        if (buildPosition < 0) {
             stations.push({ 'x': buildX, 'y': buildY, 'isDragging': false });
             drawCanvas();
         }
         else {
-            stations.splice(stationPosition, 1);
+            stations.splice(buildPosition, 1);
             drawCanvas();
         }
     }
@@ -99,18 +133,9 @@ function gridManipulation(index) {
 function drawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    for (var s in stations) {
-        ctx.drawImage(station, stations[s].x, stations[s].y, 50, 50);
-    };
+    // for (var s in stations) {
+    //     ctx.drawImage(station, stations[s].x, stations[s].y, 50, 50);
+    // };
 };
 
-function addStation() {
-    if (!station.active) {
-        station.style.backgroundColor = 'aquamarine';
-        station.active = true;
-    }
-    else {
-        station.style.backgroundColor = 'transparent';
-        station.active = false;
-    }
-};
+drawCanvas();
