@@ -32,14 +32,9 @@ class ToolCollection {
     constructor(name) {
         this._activeTool;
         this._hasActiveTool = false;
-        this._types = [];
     }
 
-    addTypes(type){
-        this._types.push(type);
-    }
-
-    get activeTool() {
+    activeTool() {
         return this._activeTool;
     }
     setActiveTool(tool) {
@@ -62,21 +57,17 @@ class ToolCollection {
         }
     }
 }
-
 const tools = new ToolCollection();
 
-const assets = document.getElementsByClassName("tools__toolbox--item");
+const assets = new Map();
 
-for (let c = 0; c < assets.length; c++) {
-    let tool = assets[c];
-    let newType = { tipo: tool.id };
-    tools.addTypes(newType);
+const toolBar = document.getElementsByClassName("tools__toolbox--item");
+
+for (let c = 0; c < toolBar.length; c++) {
+    let tool = toolBar[c];
+    assets.set(tool.id,[])
     tool.addEventListener("click", () => tools.setActiveTool(tool));
 }
-
-const stations = [];
-const walls = [];
-
 // Mouse events
 canvas.onmousedown = mouseDown;
 // canvas.onmousemove = mouseMove;
@@ -112,13 +103,17 @@ function gridManipulation(index) {
     var buildX = gridPos[index].x * 60 + 5;
     var buildY = gridPos[index].y * 60 + 5;
     if (tools.activeTool) {
-        var buildPosition = getPositionIndex(buildX, buildY, stations)
+        var assetID = tools.activeTool().id;
+        var builtAssets = assets.get(assetID)
+        var buildPosition = getPositionIndex(buildX, buildY, builtAssets)
         if (buildPosition < 0) {
-            stations.push({ 'x': buildX, 'y': buildY, 'isDragging': false });
+            builtAssets.push({ 'x': buildX, 'y': buildY, 'type': assetID });
+            assets.set(assetID,builtAssets);
             drawCanvas();
         }
         else {
-            stations.splice(buildPosition, 1);
+            builtAssets.splice(buildPosition, 1);
+            assets.set(assetID,builtAssets);
             drawCanvas();
         }
     }
@@ -133,9 +128,10 @@ function gridManipulation(index) {
 function drawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    // for (var s in stations) {
-    //     ctx.drawImage(station, stations[s].x, stations[s].y, 50, 50);
-    // };
+    var builtAssets = [...assets.values()].flat();
+    for (var s in builtAssets) {
+         ctx.drawImage(document.getElementById(builtAssets[s].type), builtAssets[s].x, builtAssets[s].y, 50, 50);
+    };
 };
 
 drawCanvas();
