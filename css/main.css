@@ -37,49 +37,54 @@ main {
   display: flex;
   flex-direction: column;
 }
-@media (min-width: 992px) {
-  main {
-    flex-direction: row;
-  }
-}
 
-.main__primary-feature {
+.canvas-grid {
   background-color: #fbfbfb;
   flex-grow: 1;
   display: flex;
   padding: 1.5em;
 }
 
-.main__secondary-feature {
+.canvas-grid__canvas {
+  flex-grow: 1;
+}
+
+.tools {
   background-color: #6F4D8F;
   flex-basis: 10%;
   padding: 1.5em;
   font-size: 0.75em;
   color: #f6f6f6;
 }
+
+.tools__toolbox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.tools__toolbox--item {
+  display: block;
+  padding: 0.5em;
+}
+
+/*QUERY DESKTOP*/
 @media (min-width: 992px) {
-  .main__secondary-feature {
+  main {
+    flex-direction: row;
+  }
+
+  .tools {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
   }
-}
 
-.main__secondary-feature--funcoes {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-@media (min-width: 992px) {
-  .main__secondary-feature--funcoes {
+  .tools__toolbox {
     display: flex;
     align-items: center;
   }
-}
-.main__secondary-feature--funcoes > * {
-  display: block;
-  padding: 0.5em;
 }
 
 /*# sourceMappingURL=main.css.map */

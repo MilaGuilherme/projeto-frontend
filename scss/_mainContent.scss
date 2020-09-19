@@ -1,49 +1,51 @@
 main {
     display: flex;
     flex-direction: column;
-    @media(min-width: styles.$break__desktop) {
-        & {
-            flex-direction: row;
-        }
-    }
 }
 
-.main__primary-feature {
+.canvas-grid {
     background-color: #fbfbfb;
     flex-grow: 1;
     display: flex;
     padding: styles.$space__df;
 }
 
-.main__secondary-feature {
+.canvas-grid__canvas{
+    flex-grow:1;
+}
+
+.tools {
     background-color: styles.$color__primary;
     flex-basis: 10%;
     padding: styles.$space__df;
     font-size: styles.$font__sm;
     color: styles.$color__font-light;
-
-    @media(min-width: styles.$break__desktop) {
-        & {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-        }
-    }
 }
 
-.main__secondary-feature--funcoes {
+.tools__toolbox {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    @media(min-width: styles.$break__desktop) {
-        & {
-            display: flex;
-            align-items: center;
-        }
+}
+
+.tools__toolbox--item {
+    display: block;
+    padding: styles.$space__sm;
+}
+
+/*QUERY DESKTOP*/
+@media(min-width: styles.$break__desktop) {
+    main {
+        flex-direction: row;
     }
-    & > * {
-        display:block;
-        padding: styles.$space__sm;
+    .tools {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .tools__toolbox {
+        display: flex;
+        align-items: center;
     }
 }

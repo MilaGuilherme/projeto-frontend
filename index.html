@@ -26,17 +26,16 @@
     <h1>Planta de escritório</h1>
   </header>
   <main>
-    <aside class="main__secondary-feature">
-      <div class="main__secondary-feature--funcoes">
-        <img id="estacao" src="./img/estacao.svg" height="50px" alt="estacao-de-trabalho" onclick="addStation()">
-        <img id="parede" src="./img/parede.svg" height="50px" alt="WIP" hidden>
-        <div></div>
+    <aside class="tools">
+      <div class="tools__toolbox">
+        <img class="tools__toolbox--item" id="estacao" src="./img/estacao.svg" height="50px" alt="estacao-de-trabalho" onclick="addStation()">
+        <img class="tools__toolbox--item" id="parede" src="./img/parede.svg" height="50px" alt="WIP" hidden>
       </div>
       Clique no desenho da mesa para começar a adicioná-las ao grid. Clique novamente para removê-las.
     </aside>
-    <section class="main__primary-feature">
+    <section class="canvas-grid">
       <img id="grid" src="./img/grid.svg" height="50px" alt="grid" hidden>      
-      <div style="flex-grow:1;">
+      <div class="canvas-grid__canvas">
         <canvas id="canvas"></canvas>
       </div>
     </section>
