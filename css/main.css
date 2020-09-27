@@ -4,6 +4,7 @@
 /*Heights*/
 /*Breakpoints - Min-width*/
 body {
+  background-color: #2f3038;
   color: #333;
   font-family: "Sarabun", "Roboto", "OpenSans", "Helvetica", "Arial";
 }
@@ -18,7 +19,7 @@ header {
 main {
   background-color: #ececec;
   color: #333;
-  height: 85vh;
+  height: 75vh;
 }
 
 footer {
@@ -31,6 +32,14 @@ footer {
 h1 {
   font-family: "Montserrat";
   font-size: 2em;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+}
+button.is-active {
+  background-color: aquamarine !important;
 }
 
 main {
@@ -66,10 +75,6 @@ main {
 .tools__toolbox--item {
   display: block;
   padding: 0.5em;
-  background-color: transparent;
-}
-.tools__toolbox--item.is-active {
-  background-color: aquamarine !important;
 }
 
 /*QUERY DESKTOP*/

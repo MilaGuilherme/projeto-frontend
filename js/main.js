@@ -15,14 +15,17 @@ var offsetY = BB.top;
 //Create grid and fill array
 var grid = ctx.createPattern(document.getElementById('grid'), 'repeat');
 ctx.fillStyle = grid;
+const temporaryPosition = { 'x': -1, 'y': -1 };
 
 //Create virtual grid for positioning
 var gridX = Math.round(canvas.width / 60);
 var gridY = Math.round(canvas.height / 60);
+const positionModifier = 60;
+const positionOffset = 5;
 const gridPos = [];
 for (var x = 0; x < gridX; x++) {
     for (let y = 0; y < gridY; y++) {
-        gridPos.push({ 'x': x, 'y': y, 'occupied': false });
+        gridPos.push({ 'x': x, 'y': y });
     };
 };
 
@@ -35,7 +38,7 @@ class ToolCollection {
     }
 
     activeTool() {
-        if (this._hasActiveTool) {return this._activeTool;}
+        if (this._hasActiveTool) { return this._activeTool; }
     }
     setActiveTool(tool) {
         if (!this._hasActiveTool) { //Set the clicked tool
@@ -46,11 +49,13 @@ class ToolCollection {
         else {
             if (tool == this._activeTool) { //Unset the active tool
                 tool.classList.remove("is-active");
+                tool.setAttribute("aria-checked", false);
                 this._hasActiveTool = false;
             }
             else { //Unset the active and set the clicked tool
                 this._activeTool.classList.remove("is-active");
                 this._activeTool = tool;
+                tool.setAttribute("aria-checked", true);
                 this._hasActiveTool = true;
                 tool.classList.add("is-active");
             }
@@ -65,7 +70,7 @@ const toolBar = document.getElementsByClassName("tools__toolbox--item");
 
 for (let c = 0; c < toolBar.length; c++) {
     let tool = toolBar[c];
-    assets.set(tool.id,[])
+    assets.set(tool.id, [])
     tool.addEventListener("click", () => tools.setActiveTool(tool));
 }
 // Mouse events
@@ -81,9 +86,58 @@ function mouseDown(e) {
     //Get the index position in the grid and manipulate the grid under that position
     mouseX = Math.floor(mx / 60);
     mouseY = Math.floor(my / 60);
+    console.log(mouseY);
     index = getPositionIndex(mouseX, mouseY, gridPos);
     index > -1 ? gridManipulation(index) : null;
 };
+
+// Prevents scrolling page with space
+window.onkeydown = function (e) {
+    if (e.keyCode != 37) { e.preventDefault(); }
+};
+
+window.onkeydown = function (e) {
+    if (tools.activeTool()) {
+        var key = e.keyCode
+        if (temporaryPosition.x == -1 && temporaryPosition.y == -1) {
+            temporaryPosition.x = 0;
+            temporaryPosition.y = 0;
+            drawCanvas()
+        }
+        else {
+            if (key == 37) {
+                if (temporaryPosition.x > 0) {
+                    temporaryPosition.x--
+                    drawCanvas()
+                }
+            }
+            else if (key == 38) {
+                if (temporaryPosition.y > 0) {
+                    temporaryPosition.y--
+                    drawCanvas()
+                }
+            }
+            else if (key == 39) {
+                if (temporaryPosition.x < gridX - 1) {
+                    temporaryPosition.x++
+                    drawCanvas()
+                }
+            }
+            else if (key == 40) {
+                if (temporaryPosition.y < gridY - 1) {
+                    temporaryPosition.y++
+                    drawCanvas()
+                }
+
+            }
+            else if (key == 96 || key == 187) {
+                var index = getPositionIndex(temporaryPosition.x, temporaryPosition.y, gridPos);
+                gridManipulation(index)
+            }
+        }
+    }
+}
+
 
 //Function to get the index of a position inside an array of objects, add the positions and the array to find if it contains an object with the same x and y values.
 function getPositionIndex(x, y, array) {
@@ -93,33 +147,33 @@ function getPositionIndex(x, y, array) {
 
 //Manipulate grid
 function gridManipulation(index) {
-    var buildX = gridPos[index].x * 60 + 5;
-    var buildY = gridPos[index].y * 60 + 5;
+    var buildX = gridPos[index].x * positionModifier + positionOffset;
+    var buildY = gridPos[index].y * positionModifier + positionOffset;
     if (tools.activeTool()) {
         var assetID = tools.activeTool().id;
         var builtAssets = [...assets.values()].flat();
         var assetToBuild = { 'x': buildX, 'y': buildY, 'type': assetID }
-        if (builtAssets.some(item => item.x === assetToBuild.x && item.y === assetToBuild.y && item.type === assetToBuild.type)){
-            addRemoveAsset(assetToBuild,"remove")
+        if (builtAssets.some(item => item.x === assetToBuild.x && item.y === assetToBuild.y && item.type === assetToBuild.type)) {
+            addRemoveAsset(assetToBuild, "remove")
         }
-        else if(getPositionIndex(buildX, buildY, builtAssets) < 0){
-            addRemoveAsset(assetToBuild,"build")
+        else if (getPositionIndex(buildX, buildY, builtAssets) < 0) {
+            addRemoveAsset(assetToBuild, "build")
         }
     }
 }
 
-function addRemoveAsset(assetToBuild,order){
+function addRemoveAsset(assetToBuild, order) {
     var assetID = assetToBuild.type;
     var builtAssets = assets.get(assetToBuild.type)
     if (order == "build") {
         builtAssets.push(assetToBuild);
-        assets.set(assetID,builtAssets);
+        assets.set(assetID, builtAssets);
         drawCanvas();
     }
-    else if(order == "remove"){
+    else if (order == "remove") {
         indexOfAsset = getPositionIndex(assetToBuild.x, assetToBuild.y, builtAssets)
         builtAssets.splice(indexOfAsset, 1);
-        assets.set(assetID,builtAssets);
+        assets.set(assetID, builtAssets);
         drawCanvas();
     }
 }
@@ -129,8 +183,13 @@ function drawCanvas() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     var assetsToBuild = [...assets.values()].flat();
     for (var s in assetsToBuild) {
-         ctx.drawImage(document.getElementById(assetsToBuild[s].type), assetsToBuild[s].x, assetsToBuild[s].y, 50, 50);
+        var img = document.getElementById(`${assetsToBuild[s].type}-img`);
+        ctx.drawImage(img, assetsToBuild[s].x, assetsToBuild[s].y, 50, 50);
     };
+    if (tools.activeTool()) {
+        var tempImg = document.getElementById(`${tools.activeTool().id}-img`);
+        tools.activeTool() ? ctx.drawImage(tempImg, temporaryPosition.x * positionModifier + positionOffset, temporaryPosition.y * positionModifier + positionOffset, 50, 50) : null;
+    }
 };
 
 drawCanvas();

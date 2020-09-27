@@ -31,10 +31,6 @@ main {
 .tools__toolbox--item {
     display: block;
     padding: styles.$space__sm;
-    background-color: transparent;
-    &.is-active {
-        background-color : aquamarine !important;
-    }
 }
 
 /*QUERY DESKTOP*/

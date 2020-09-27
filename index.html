@@ -27,16 +27,16 @@
   </header>
   <main>
     <aside class="tools">
-      <div class="tools__toolbox">
-        <img class="tools__toolbox--item" id="estacao" src="./img/estacao.svg" height="50px" alt="estacao-de-trabalho">
-        <img class="tools__toolbox--item" id="parede" src="./img/parede.svg" height="50px" alt="parede">
+      <div class="tools__toolbox" role="grid">
+        <button role="button" class="tools__toolbox--item" id="estacao" role="button" aria-label="Botão para adicionar uma estação de trabalho"><img id="estacao-img" src="./img/estacao.svg" height="50px" alt="estacao-de-trabalho"></button>
+        <button role="button" class="tools__toolbox--item" id="parede" role="button" aria-label="Botão para adicionar uma parede"><img id="parede-img" src="./img/parede.svg" height="50px" alt="parede"></button>
       </div>
-      Clique no desenho da mesa para começar a adicioná-las ao grid. Clique novamente para removê-las.
+      <p role="tooltip">Ao selecionar uma imagem para inserir, utilize o mouse, ou pressione as setas direcionais para posicionar o elemento e aperte o número "0" em seu teclado numérico ou a tecla "=". Com a mesma imagem selecionada, clicando ou inserindo por teclado a imagem no mesmo local irá remover o elemento. </p>
     </aside>
     <section class="canvas-grid">
-      <img id="grid" src="./img/grid.svg" height="50px" alt="grid" hidden>      
+      <img id="grid" src="./img/grid.svg" height="50px" role="none" hidden>      
       <div class="canvas-grid__canvas">
-        <canvas id="canvas"></canvas>
+        <canvas role="figure" id="canvas"></canvas>
       </div>
     </section>
   </main>

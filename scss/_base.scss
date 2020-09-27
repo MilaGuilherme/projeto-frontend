@@ -1,4 +1,5 @@
 body{
+    background-color: styles.$color__background-dark;
     color: styles.$color__font-dark;
     font-family: styles.$font__main;
 }
@@ -26,4 +27,12 @@ footer{
 h1{
     font-family: styles.$font__alternate;
     font-size: styles.$font__lg;
+}
+
+button {
+    border: none;
+    background-color: transparent;
+    &.is-active {
+        background-color : aquamarine !important;
+    }
 }
