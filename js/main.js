@@ -86,7 +86,6 @@ function mouseDown(e) {
     //Get the index position in the grid and manipulate the grid under that position
     mouseX = Math.floor(mx / 60);
     mouseY = Math.floor(my / 60);
-    console.log(mouseY);
     index = getPositionIndex(mouseX, mouseY, gridPos);
     index > -1 ? gridManipulation(index) : null;
 };
@@ -202,10 +201,10 @@ if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js')
                 .then(
                     function (registration) {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                        //console.log('ServiceWorker registration successful with scope: ', registration.scope);
                     },
                     function (err) {
-                        console.log('ServiceWorker registration failed: ', err);
+                        //console.log('ServiceWorker registration failed: ', err);
                     });
         });
 }
