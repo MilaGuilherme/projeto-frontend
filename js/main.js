@@ -96,6 +96,47 @@ window.onkeydown = function (e) {
     if (e.keyCode != 37) { e.preventDefault(); }
 };
 
+//Function to get the index of a position inside an array of objects, add the positions and the array to find if it contains an object with the same x and y values.
+function getPositionIndex(x, y, array) {
+    var position = array.findIndex(pos => pos.x == x && pos.y == y);
+    return position;
+};
+
+//Manipulate grid
+
+function gridManipulation(index) {
+    var buildX = gridPos[index].x * positionModifier + positionOffset;
+    var buildY = gridPos[index].y * positionModifier + positionOffset;
+    if (tools.activeTool()) {
+        var assetID = tools.activeTool().id;
+        var builtAssets = [...assets.values()].flat();
+        var assetToBuild = { 'x': buildX, 'y': buildY, 'type': assetID }
+        if (builtAssets.some(item => item.x === assetToBuild.x && item.y === assetToBuild.y && item.type === assetToBuild.type)) {
+            addRemoveAsset(assetToBuild, "remove")
+        }
+        else if (getPositionIndex(buildX, buildY, builtAssets) < 0) {
+            addRemoveAsset(assetToBuild, "build")
+        }
+    }
+}
+
+function addRemoveAsset(assetToBuild, order) {
+    var assetID = assetToBuild.type;
+    var builtAssets = assets.get(assetToBuild.type)
+    if (order == "build") {
+        builtAssets.push(assetToBuild);
+        assets.set(assetID, builtAssets);
+        drawCanvas();
+    }
+    else if (order == "remove") {
+        indexOfAsset = getPositionIndex(assetToBuild.x, assetToBuild.y, builtAssets)
+        builtAssets.splice(indexOfAsset, 1);
+        assets.set(assetID, builtAssets);
+        drawCanvas();
+    }
+}
+
+
 window.onkeydown = function (e) {
     if (tools.activeTool()) {
         var key = e.keyCode
@@ -138,45 +179,6 @@ window.onkeydown = function (e) {
     }
 }
 
-
-//Function to get the index of a position inside an array of objects, add the positions and the array to find if it contains an object with the same x and y values.
-function getPositionIndex(x, y, array) {
-    var position = array.findIndex(pos => pos.x == x && pos.y == y);
-    return position;
-};
-
-//Manipulate grid
-function gridManipulation(index) {
-    var buildX = gridPos[index].x * positionModifier + positionOffset;
-    var buildY = gridPos[index].y * positionModifier + positionOffset;
-    if (tools.activeTool()) {
-        var assetID = tools.activeTool().id;
-        var builtAssets = [...assets.values()].flat();
-        var assetToBuild = { 'x': buildX, 'y': buildY, 'type': assetID }
-        if (builtAssets.some(item => item.x === assetToBuild.x && item.y === assetToBuild.y && item.type === assetToBuild.type)) {
-            addRemoveAsset(assetToBuild, "remove")
-        }
-        else if (getPositionIndex(buildX, buildY, builtAssets) < 0) {
-            addRemoveAsset(assetToBuild, "build")
-        }
-    }
-}
-
-function addRemoveAsset(assetToBuild, order) {
-    var assetID = assetToBuild.type;
-    var builtAssets = assets.get(assetToBuild.type)
-    if (order == "build") {
-        builtAssets.push(assetToBuild);
-        assets.set(assetID, builtAssets);
-        drawCanvas();
-    }
-    else if (order == "remove") {
-        indexOfAsset = getPositionIndex(assetToBuild.x, assetToBuild.y, builtAssets)
-        builtAssets.splice(indexOfAsset, 1);
-        assets.set(assetID, builtAssets);
-        drawCanvas();
-    }
-}
 //Draw and Redraw canvas
 function drawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -193,3 +195,17 @@ function drawCanvas() {
 };
 
 drawCanvas();
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load',
+        function () {
+            navigator.serviceWorker.register('/sw.js')
+                .then(
+                    function (registration) {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    },
+                    function (err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+        });
+}
