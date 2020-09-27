@@ -85,11 +85,6 @@ function mouseDown(e) {
     index > -1 ? gridManipulation(index) : null;
 };
 
-//On move (WIP)
-// function mouseMove(e) {
-
-// };
-
 //Function to get the index of a position inside an array of objects, add the positions and the array to find if it contains an object with the same x and y values.
 function getPositionIndex(x, y, array) {
     var position = array.findIndex(pos => pos.x == x && pos.y == y);
@@ -103,25 +98,31 @@ function gridManipulation(index) {
     if (tools.activeTool()) {
         var assetID = tools.activeTool().id;
         var builtAssets = [...assets.values()].flat();
-        var indexOfAsset = getPositionIndex(buildX, buildY, builtAssets)
-        if (indexOfAsset < 0) {
-            builtAssets.push({ 'x': buildX, 'y': buildY, 'type': assetID });
-            assets.set(assetID,builtAssets);
-            drawCanvas();
+        var assetToBuild = { 'x': buildX, 'y': buildY, 'type': assetID }
+        if (builtAssets.some(item => item.x === assetToBuild.x && item.y === assetToBuild.y && item.type === assetToBuild.type)){
+            addRemoveAsset(assetToBuild,"remove")
         }
-        else if(builtAssets[indexOfAsset].type == assetID){
-            builtAssets.splice(indexOfAsset, 1);
-            assets.set(assetID,builtAssets);
-            drawCanvas();
+        else if(getPositionIndex(buildX, buildY, builtAssets) < 0){
+            addRemoveAsset(assetToBuild,"build")
         }
     }
 }
 
-//Drag WIP
-// function dragAsset() {
-
-// };
-
+function addRemoveAsset(assetToBuild,order){
+    var assetID = assetToBuild.type;
+    var builtAssets = assets.get(assetToBuild.type)
+    if (order == "build") {
+        builtAssets.push(assetToBuild);
+        assets.set(assetID,builtAssets);
+        drawCanvas();
+    }
+    else if(order == "remove"){
+        indexOfAsset = getPositionIndex(assetToBuild.x, assetToBuild.y, builtAssets)
+        builtAssets.splice(indexOfAsset, 1);
+        assets.set(assetID,builtAssets);
+        drawCanvas();
+    }
+}
 //Draw and Redraw canvas
 function drawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
